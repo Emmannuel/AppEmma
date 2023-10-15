@@ -3,12 +3,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Conecta a la base de datos (ajusta las credenciales)
     include('../database/conexion.php');
     
-    $searchTerm = json_decode(file_get_contents("php://input"), true);
+    $json = file_get_contents("php://input");
+    $data = json_decode($json, true);
 
-    if (is_string($searchTerm)) {
-        $searchTerm = '%' . $searchTerm . '%'; // Agrega comodines % para buscar coincidencias parciales
+    if (isset($data['searchTerm']) && is_string($data['searchTerm'])) {
+        $searchTerm = '%' . $data['searchTerm'] . '%'; // Agrega comodines % para buscar coincidencias parciales
 
-        $sql = "SELECT nom_usuario, correo FROM usuario WHERE nom_usuario LIKE ? ";
+        $sql = "SELECT nom_usuario, correo FROM usuario WHERE nom_usuario LIKE ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $searchTerm); // Enlaza el parámetro
 
@@ -20,15 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             while ($row = $result->fetch_assoc()) {
                 $resultados[] = $row;
             }
+
             echo json_encode($resultados);
         } else {
-            echo json_encode([]); // Devuelve un arreglo vacío si hay un error en la consulta
+            echo json_encode(['error' => 'Error al ejecutar la consulta SQL.']);
         }
 
         $stmt->close();
-        $conn->close();
     } else {
-        echo json_encode([]); // Devuelve un arreglo vacío si no se proporciona un término de búsqueda válido
+        echo json_encode(['error' => 'Término de búsqueda no válido']);
     }
+
+    $conn->close();
 }
 ?>

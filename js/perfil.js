@@ -117,34 +117,32 @@ document.getElementById('formBusqueda').addEventListener('submit', function (eve
 
     const searchTerm = document.getElementById('busqueda').value;
 
-    // Crea una instancia de XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-
-    // Configura la solicitud
-    xhr.open('POST', './usuarios/usuarios.php', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    // Define la función que se ejecutará cuando la solicitud esté completa
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-        console.log('Estado de la solicitud:', xhr.status);
-        console.log('Respuesta del servidor:', xhr.responseText);
-
-        if (xhr.status === 200) {
-            if (xhr.responseText.trim() !== "") {
-                try {
-                    const data = JSON.parse(xhr.responseText);
-                } catch (error) {
-                    console.error('Error al analizar la respuesta JSON', error);
-                }
-            } else {
-                console.error('Respuesta JSON vacía');
-            }
-        } else {
-            console.error('Error al buscar usuarios. Código de estado: ' + xhr.status);
+    // Realiza una solicitud al servidor para buscar usuarios
+    fetch('./usuarios/usuarios.php', {
+        method: 'POST',
+        body: JSON.stringify({ searchTerm }),
+        headers: {
+            'Content-Type': 'application/json'
         }
-    }
-};
-    // Envía los datos JSON al servidor
-    xhr.send(JSON.stringify({ searchTerm }));
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Procesa y muestra los resultados
+        const resultadosDiv = document.getElementById('resultados');
+        resultadosDiv.innerHTML = '';
+
+        if (data.length === 0) {
+            resultadosDiv.innerHTML = 'No se encontraron usuarios.';
+        } else {
+            data.forEach(usuario => {
+                const usuarioDiv = document.createElement('div');
+                usuarioDiv.textContent = `Nombre de usuario: ${usuario.nom_usuario}, Correo: ${usuario.correo}`;
+                resultadosDiv.appendChild(usuarioDiv);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error al buscar usuarios', error);
+    });
 });
+
