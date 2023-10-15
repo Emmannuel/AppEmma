@@ -48,7 +48,19 @@ if (isset($_POST['cerrar_sesion'])) {
         <p id="name">Nombre: <?php echo $_SESSION['nombre']; ?></p>
     </div>
     <div id="botones"></div>
-</div>
+    </div>
+    <div class="container">
+        <div class="perfil-edit" id="buscarUsuarios">
+        <h2>Buscar Usuarios</h2>
+        <form id="formBusqueda">
+            <input type="text" id="busqueda" placeholder="Nombre de usuario">
+            <button type="submit">Buscar</button>
+        </form>
+        <div id="resultados">
+            <!-- Aquí se mostrarán los resultados de la búsqueda -->
+        </div>
+        </div>
+    </div>
 <?php
 echo '<script>';
 echo 'var nomUsuario = "' . $_SESSION['nom_usuario'] . '";';
