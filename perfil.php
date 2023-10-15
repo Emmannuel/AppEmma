@@ -54,7 +54,7 @@ if (isset($_POST['cerrar_sesion'])) {
         <h2>Buscar Usuarios</h2>
         <form id="formBusqueda">
             <input type="text" id="busqueda" placeholder="Nombre de usuario">
-            <button type="submit">Buscar</button>
+            <button type="submit" class="custom-button-p">Buscar</button>
         </form>
         <div id="resultados">
             <!-- Aquí se mostrarán los resultados de la búsqueda -->

@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($data['searchTerm']) && is_string($data['searchTerm'])) {
         $searchTerm = '%' . $data['searchTerm'] . '%'; // Agrega comodines % para buscar coincidencias parciales
 
-        $sql = "SELECT nom_usuario, correo FROM usuario WHERE nom_usuario LIKE ?";
+        $sql = "SELECT nom_usuario, correo, edad FROM usuario WHERE nom_usuario LIKE ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $searchTerm); // Enlaza el parámetro
 

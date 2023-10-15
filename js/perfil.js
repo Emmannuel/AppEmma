@@ -135,8 +135,9 @@ document.getElementById('formBusqueda').addEventListener('submit', function (eve
             resultadosDiv.innerHTML = 'No se encontraron usuarios.';
         } else {
             data.forEach(usuario => {
+                document.getElementById('busqueda').value = "";
                 const usuarioDiv = document.createElement('div');
-                usuarioDiv.textContent = `Nombre de usuario: ${usuario.nom_usuario}, Correo: ${usuario.correo}`;
+                usuarioDiv.textContent = `Nombre de usuario: ${usuario.nom_usuario}, Correo: ${usuario.correo}, Edad: ${usuario.edad}`;
                 resultadosDiv.appendChild(usuarioDiv);
             });
         }
